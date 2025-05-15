@@ -1,0 +1,34 @@
+const int buttonPin = 2;  // Push button on PD2 (Pin 2)
+int counter = 0;
+int buttonState;
+int lastButtonState = HIGH;
+unsigned long lastDebounceTime = 0;
+unsigned long debounceDelay = 50;  // Debounce time in ms
+
+void setup() {
+  pinMode(buttonPin, INPUT_PULLUP);
+  Serial.begin(9600);
+  Serial.println("Push Button Counter");
+  Serial.println("Count: 0");
+}
+
+void loop() {
+  int reading = digitalRead(buttonPin);
+
+  // Check for button state change (debouncing)
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading != buttonState) {
+      buttonState = reading;
+      if (buttonState == LOW) {  // Button pressed (LOW due to pull-up)
+        counter++;
+        Serial.print("Count: ");
+        Serial.println(counter);
+      }
+    }
+  }
+  lastButtonState = reading;
+}

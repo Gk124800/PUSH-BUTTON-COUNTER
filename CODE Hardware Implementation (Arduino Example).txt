@@ -1,0 +1,34 @@
+const int buttonPin = 2;     // pushbutton pin
+const int ledPin = 13;       // LED pin (optional)
+int buttonState = 0;         // current button state
+int lastButtonState = HIGH;  // previous button state
+int counter = 0;             // counter variable
+
+void setup() {
+  pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // read the pushbutton input
+  buttonState = digitalRead(buttonPin);
+
+  // compare the buttonState to its previous state
+  if (buttonState != lastButtonState) {
+    // if the state has changed, check if button was pressed (LOW)
+    if (buttonState == LOW) {
+      // increment counter when button is pressed
+      counter++;
+      Serial.print("Count: ");
+      Serial.println(counter);
+      digitalWrite(ledPin, HIGH); // optional LED feedback
+    } else {
+      digitalWrite(ledPin, LOW);  // turn LED off when released
+    }
+    delay(50); // small delay to debounce
+  }
+  
+  // save the current state as the last state for next loop
+  lastButtonState = buttonState;
+}
